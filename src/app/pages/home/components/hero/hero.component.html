@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="hero__container">
+    <div class="hero__content">
+      <div class="left">
+        <h1 class="hero__title">{{ title }}</h1>
+        <p class="hero__subtitle">
+          {{ content }}
+        </p>
+        <div class="hero__btn">
+          <a class="btn" [routerLink]="['/login']">Ingresar</a>
+          <a class="btn-secondary" [routerLink]="['/register']">Registrate</a>
+        </div>
+      </div>
+      <div class="right">
+        <div class="hero__image">
+          <img src="../../../../../assets/img/man.svg" alt="Hero Image" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

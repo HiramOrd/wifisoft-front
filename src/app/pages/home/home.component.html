@@ -1,0 +1,20 @@
+<app-header></app-header>
+<div id="hero">
+  <app-hero
+    title="{{ header?.title }}"
+    content="{{ header?.content }}"
+  ></app-hero>
+</div>
+<div id="packs">
+  <app-packs [packs]="packages"></app-packs>
+</div>
+<div id="about">
+  <app-about
+    title="{{ about?.title }}"
+    content="{{ about?.content }}"
+  ></app-about>
+</div>
+<div id="contact">
+  <app-contact></app-contact>
+</div>
+<app-footer></app-footer>
