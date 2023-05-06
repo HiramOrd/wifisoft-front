@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { GenericText, GenericNumber } from "src/app/models/generic";
+import { GenericText } from "src/app/models/generic";
+import { PackResume } from "src/app/models/packs";
 import { LandingService } from "src/app/services/landing.service";
 
 @Component({
@@ -9,7 +10,7 @@ import { LandingService } from "src/app/services/landing.service";
 })
 export class HomeComponent implements OnInit {
   header: GenericText | undefined;
-  packages: GenericNumber[] | undefined;
+  packages: PackResume[] | undefined;
   about: GenericText | undefined;
 
   constructor(private landingService: LandingService) {}
@@ -22,16 +23,16 @@ export class HomeComponent implements OnInit {
 
   async getHeader() {
     const header = await this.landingService.getHeader();
-    this.header = header;
+    this.header = header.data;
   }
 
   async getPackages() {
     const packages = await this.landingService.getPackages();
-    this.packages = packages;
+    this.packages = packages.data;
   }
 
   async getAbout() {
     const about = await this.landingService.getAbout();
-    this.about = about;
+    this.about = about.data;
   }
 }

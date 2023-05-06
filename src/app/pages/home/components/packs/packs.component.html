@@ -1,7 +1,11 @@
 <div class="packs__container container">
   <div class="packs__title">Paquetes</div>
   <div class="packs__items">
-    <div class="packs__item" *ngFor="let dato of packs">
+    <div
+      class="packs__item"
+      *ngFor="let dato of packs"
+      [routerLink]="['/login']"
+    >
       <div class="packs__item__img">
         <svg
           xmlns="http://www.w3.org/2000/svg"

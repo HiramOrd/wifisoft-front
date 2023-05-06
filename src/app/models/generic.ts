@@ -4,8 +4,8 @@ export interface GenericText {
   image: string;
 }
 
-export interface GenericNumber {
-  title: string;
-  content: number;
-  image: string;
+export interface GenericRequest<T> {
+  code: number;
+  message: string;
+  data: T;
 }

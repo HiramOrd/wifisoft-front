@@ -34,7 +34,7 @@
           <div class="text-center text-muted mb-4">
             <small>Or sign in with credentials</small>
           </div>
-          <form role="form">
+          <form role="form" [formGroup]="form" (ngSubmit)="login()">
             <div class="form-group mb-3">
               <div class="input-group input-group-alternative">
                 <div class="input-group-prepend">
@@ -42,7 +42,12 @@
                     ><i class="ni ni-email-83"></i
                   ></span>
                 </div>
-                <input class="form-control" placeholder="Email" type="email" />
+                <input
+                  formControlName="username"
+                  class="form-control"
+                  placeholder="Email"
+                  type="email"
+                />
               </div>
             </div>
             <div class="form-group">
@@ -53,6 +58,8 @@
                   ></span>
                 </div>
                 <input
+                  formControlName="password"
+                  name="password"
                   class="form-control"
                   placeholder="Password"
                   type="password"
@@ -65,23 +72,11 @@
                 Guest
               </button>
 
-              <button type="button" class="btn btn-primary my-4">
+              <button type="submit" class="btn btn-primary my-4">
                 Sign in
               </button>
             </div>
           </form>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-6">
-          <a href="javascript:void(0)" class="text-light"
-            ><small>Forgot password?</small></a
-          >
-        </div>
-        <div class="col-6 text-right">
-          <a href="javascript:void(0)" class="text-light"
-            ><small>Create new account</small></a
-          >
         </div>
       </div>
     </div>

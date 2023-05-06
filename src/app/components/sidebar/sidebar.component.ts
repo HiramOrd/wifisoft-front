@@ -16,7 +16,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: "/tables",
-    title: "Tables",
+    title: "History",
     icon: "ni-bullet-list-67 text-red",
     class: "",
   },
