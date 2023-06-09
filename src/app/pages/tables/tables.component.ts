@@ -24,7 +24,9 @@ export class TablesComponent implements OnInit {
 
       this.packs = (await this.dashboardService.getPack(this.user)).data;
       this.packsToBuy = (await this.landingService.getPackages()).data;
-
+      console.log('this.packs', this.packs);
+      console.log('this.packsToBuy', this.packsToBuy);
+      
       this.packs.packs = this.packs.packs.map((item) => {
         item.percent = (item?.hoursConsumed * 100) / item?.hours;
         return item;

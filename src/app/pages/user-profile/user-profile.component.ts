@@ -10,6 +10,7 @@ import { DashboardService } from "src/app/services/dashboard.service";
   styleUrls: ["./user-profile.component.scss"],
 })
 export class UserProfileComponent implements OnInit {
+  public isGuest : boolean = false;
   form = this.formBuilder.group({
     email: ["", Validators.required],
     username: ["", Validators.required],
@@ -22,12 +23,26 @@ export class UserProfileComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    await this.getUser();
+  }
+
+  async getUser(){
     try {
       const user = localStorage.getItem("username");
+      console.log('user', user);
 
+      
       const { email, name, username } = (
         await this.dashboardService.getUser(user)
       ).data;
+
+      if(name == 'Guest'){
+        console.log('Es invitado');
+        
+      }else{
+        console.log('No es invitado');
+        this.form.get('email').disable();
+      }
 
       this.form.patchValue({
         email,
@@ -39,9 +54,21 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+  validateForm(){
+    if (this.form.invalid) {
+      // Acciones cuando el formulario es válido
+      console.log('invalido');
+      
+      return
+    }
+    this.submit();
+  }
+
   async submit() {
     try {
       const { email, name, username } = this.form.value;
+      console.log('enviando...');
+      
       await this.dashboardService.postUser(email, name, username);
     } catch (error) {}
   }

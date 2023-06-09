@@ -30,6 +30,8 @@ export class DashboardComponent implements OnInit {
     ];
     this.data = this.datasets[0];
 
+    console.log('this.data', this.data);
+    
 
     var chartOrders = document.getElementById('chart-orders');
 
@@ -53,6 +55,7 @@ export class DashboardComponent implements OnInit {
 
 
   public updateOptions() {
+
     this.salesChart.data.datasets[0].data = this.data;
     this.salesChart.update();
   }
