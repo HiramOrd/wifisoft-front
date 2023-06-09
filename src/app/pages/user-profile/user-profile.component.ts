@@ -15,6 +15,7 @@ export class UserProfileComponent implements OnInit {
     email: ["", Validators.required],
     username: ["", Validators.required],
     name: ["", Validators.required],
+    lastName: ["", Validators.required],
   });
 
   constructor(
@@ -29,25 +30,22 @@ export class UserProfileComponent implements OnInit {
   async getUser(){
     try {
       const user = localStorage.getItem("username");
-      console.log('user', user);
 
-      
-      const { email, name, username } = (
+      const { email, name, lastName, username } = (
         await this.dashboardService.getUser(user)
       ).data;
 
       if(name == 'Guest'){
-        console.log('Es invitado');
         
       }else{
-        console.log('No es invitado');
         this.form.get('email').disable();
       }
 
       this.form.patchValue({
         email,
         name,
-        username,
+        lastName,
+        username
       });
     } catch (error) {
       console.log(error);
@@ -56,9 +54,7 @@ export class UserProfileComponent implements OnInit {
 
   validateForm(){
     if (this.form.invalid) {
-      // Acciones cuando el formulario es válido
-      console.log('invalido');
-      
+      console.log('Invalido');
       return
     }
     this.submit();
@@ -67,8 +63,7 @@ export class UserProfileComponent implements OnInit {
   async submit() {
     try {
       const { email, name, username } = this.form.value;
-      console.log('enviando...');
-      
+
       await this.dashboardService.postUser(email, name, username);
     } catch (error) {}
   }

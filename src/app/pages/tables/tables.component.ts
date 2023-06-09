@@ -24,13 +24,25 @@ export class TablesComponent implements OnInit {
 
       this.packs = (await this.dashboardService.getPack(this.user)).data;
       this.packsToBuy = (await this.landingService.getPackages()).data;
-      console.log('this.packs', this.packs);
-      console.log('this.packsToBuy', this.packsToBuy);
       
       this.packs.packs = this.packs.packs.map((item) => {
-        item.percent = (item?.hoursConsumed * 100) / item?.hours;
+        item.percent = (item?.minutesConsumed * 100) / item?.minutes;
+        
+        switch (item.minutes) {
+          case 60:
+            item.type = '1 Hora';
+            break;
+          case 120:
+            item.type = '2 Horas';
+            break;
+          default:
+            item.type = '2 Horas';
+            break;
+        }
+
         return item;
       });
+      console.log('this.packs', this.packs);
     } catch (error) {
       console.log(error);
     }

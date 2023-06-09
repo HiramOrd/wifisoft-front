@@ -52,6 +52,7 @@
                     <input
                       type="text"
                       id="input-username"
+                      [class.is-invalid]="form.get('username').invalid && form.get('username').touched"
                       class="form-control form-control-alternative"
                       placeholder="Username"
                       formControlName="username"
@@ -74,7 +75,7 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col">
+                <div class="col-lg-6">
                   <div class="form-group">
                     <label class="form-control-label" for="input-first-name"
                       >Name</label
@@ -82,9 +83,24 @@
                     <input
                       type="text"
                       id="input-first-name"
+                      [class.is-invalid]="form.get('name').invalid && form.get('name').touched"
                       class="form-control form-control-alternative"
                       placeholder="First name"
                       formControlName="name"
+                    />
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label" for="input-last-name"
+                      >Lastname</label>
+                    <input
+                      type="text"
+                      id="input-last-name"
+                      [class.is-invalid]="form.get('lastName').invalid && form.get('lastName').touched"
+                      class="form-control form-control-alternative"
+                      placeholder="Last name"
+                      formControlName="lastName"
                     />
                   </div>
                 </div>

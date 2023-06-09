@@ -13,12 +13,13 @@ export interface PackResume {
 }
 
 export interface Pack {
-  hours: number;
+  minutes: number;
   dateStart: string;
   dateEnd: null;
-  hoursConsumed: number;
+  minutesConsumed: number;
   percent: number;
   vouchers: Voucher[];
+  type: string;
 }
 
 export interface Voucher {
