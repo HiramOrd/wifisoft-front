@@ -102,33 +102,44 @@ export class DashboardComponent implements OnInit {
   }
 
   setChartByWeek() {
-    const fechaActual = new Date();
+    const currentDate = new Date();
 
     const arrayPackLastWeek: Pack[] = this.packs.packs.filter(
       (objeto) => {
         const timeElapsed =
-          fechaActual.getTime() - new Date(objeto.dateEnd).getTime();
+          currentDate.getTime() - new Date(objeto.dateEnd).getTime();
         const timeInDays = Math.floor(timeElapsed / (1000 * 60 * 60 * 24));
         return timeInDays <= 7 && timeInDays >= 0;
       }
     );
-      
+
     const arrayPacksSeparatedByWeek: Pack[][] = [];
     let minutesPerDay: number[] = [];
-
-    for (let i = 0; i < 7; i++) {
+    let auxIterator = 0;
+    for (let i = 6; i >= 0; i--) {
       const subArray: Pack[] = arrayPackLastWeek.filter((objeto) => {
-        //console.log('new Date(objeto.dateEnd).getDay()', new Date(objeto.dateEnd).getDay());
-        //console.log('iterator', i);
-        return new Date(objeto.dateEnd).getDay()-1 === i;
-      });
+        return new Date(objeto.dateEnd).getDay() === i;
+    });
+      
       arrayPacksSeparatedByWeek.push(subArray);
-
-      minutesPerDay[i] = arrayPacksSeparatedByWeek[i].reduce((accumulator, element) => accumulator + element.minutesConsumed, 0);
+      
+      minutesPerDay[i] = arrayPacksSeparatedByWeek[auxIterator].reduce((accumulator, element) => accumulator + element.minutesConsumed, 0);
+      auxIterator++;
     }
+
+    const pastDays: string[] = [];
+
+    const dayWeeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     
+    for (let i = 7; i >= 1; i--) {
+      const pastDay = new Date(currentDate);
+      pastDay.setDate(currentDate.getDate()+1 - i);
+      const nameDay = dayWeeks[pastDay.getDay()];
+      pastDays.push(nameDay);
+    }
+
     const weekChart: DashboardChart = {
-      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      labels: [...pastDays],
       datasets: [
         {
           label: "Week",
