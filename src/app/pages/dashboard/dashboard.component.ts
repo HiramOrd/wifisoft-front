@@ -105,25 +105,25 @@ export class DashboardComponent implements OnInit {
     const currentDate = new Date();
 
     const arrayPackLastWeek: Pack[] = this.packs.packs.filter(
-      (objeto) => {
+      (pack) => {
         const timeElapsed =
-          currentDate.getTime() - new Date(objeto.dateEnd).getTime();
+          currentDate.getTime() - new Date(pack.dateEnd).getTime();
         const timeInDays = Math.floor(timeElapsed / (1000 * 60 * 60 * 24));
         return timeInDays <= 7 && timeInDays >= 0;
       }
     );
 
-    const arrayPacksSeparatedByWeek: Pack[][] = [];
+    const arrayPacksSeparatedByDayWeek: Pack[][] = [];
     let minutesPerDay: number[] = [];
     let auxIterator = 0;
     for (let i = 6; i >= 0; i--) {
-      const subArray: Pack[] = arrayPackLastWeek.filter((objeto) => {
-        return new Date(objeto.dateEnd).getDay() === i;
+      const subArray: Pack[] = arrayPackLastWeek.filter((pack) => {
+        return new Date(pack.dateEnd).getDay() === i;
     });
       
-      arrayPacksSeparatedByWeek.push(subArray);
+      arrayPacksSeparatedByDayWeek.push(subArray);
       
-      minutesPerDay[i] = arrayPacksSeparatedByWeek[auxIterator].reduce((accumulator, element) => accumulator + element.minutesConsumed, 0);
+      minutesPerDay[i] = arrayPacksSeparatedByDayWeek[auxIterator].reduce((accumulator, element) => accumulator + element.minutesConsumed, 0);
       auxIterator++;
     }
 
