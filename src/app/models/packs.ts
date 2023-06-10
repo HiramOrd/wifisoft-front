@@ -15,7 +15,7 @@ export interface PackResume {
 export interface Pack {
   minutes: number;
   dateStart: string;
-  dateEnd: null;
+  dateEnd: null | string;
   minutesConsumed: number;
   percent: number;
   vouchers: Voucher[];
@@ -31,4 +31,12 @@ export interface Voucher {
 export interface Voucher {
   code: string;
   minutes: number;
+}
+
+export interface DashboardChart{
+  labels: string[],
+  datasets: [{
+    label: string,
+    data: number[]
+  }]
 }

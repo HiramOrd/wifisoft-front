@@ -42,7 +42,7 @@
                   class="nav-item mr-2 mr-md-0"
                   data-toggle="chart"
                   data-target="#chart-sales"
-                  (click)="data = datasets[0]; updateOptions()"
+                  (click)="setChartByMonths()"
                 >
                   <a
                     href="javascript:void(0)"
@@ -59,7 +59,7 @@
                   class="nav-item"
                   data-toggle="chart"
                   data-target="#chart-sales"
-                  (click)="data = datasets[1]; updateOptions()"
+                  (click)="setChartByWeek()"
                 >
                   <a
                     href="javascript:void(0)"
