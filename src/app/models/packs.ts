@@ -35,8 +35,10 @@ export interface Voucher {
 
 export interface DashboardChart{
   labels: string[],
-  datasets: [{
-    label: string,
-    data: number[]
-  }]
+  datasets: [
+    {
+      label: string,
+      data: number[]
+    }
+  ]
 }

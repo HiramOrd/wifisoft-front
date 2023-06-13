@@ -26,8 +26,25 @@ export class DashboardComponent implements OnInit {
   public datasets: any;
   public data: any;
   public salesChart;
-  public clicked: boolean = true;
-  public clicked1: boolean = false;
+  public isActiveMonthChart: boolean = true;
+  public isActiveWeekChart: boolean = false;
+
+  private labelForMonths: string[] = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",]
+  private labelForWeeks: string[] = []
+  private minutesPerMonth: number[] = [];
+  private minutesPerDay: number[] = [];
   packsToBuy: PackResume[];
   user: string;
   packs: PacksHistory;
@@ -39,8 +56,54 @@ export class DashboardComponent implements OnInit {
 
   async ngOnInit() {
     await this.getAllPacks();
-    await this.setChartByMonths();
+    this.setChart();    
     this.packsToBuy = (await this.landingService.getPackages()).data;
+  }
+
+  async setChart(){
+    this.getChartByMonths();
+    this.getChartByWeek();
+
+    const generalChart: DashboardChart = {
+      labels: [
+        ...this.labelForMonths
+      ],
+      datasets: [
+        {
+          label: "Minutes",
+          data: [...this.minutesPerMonth],
+        }
+      ],
+    };
+    
+    parseOptions(Chart, chartOptions());
+
+    var chartSales = document.getElementById("chart-sales");
+
+    this.salesChart = new Chart(chartSales, {
+      type: "line",
+      options: chartExample1.options,
+      data: generalChart,
+    });
+  }
+
+  public updateOptions() {
+    if(this.isActiveMonthChart){ 
+      this.isActiveMonthChart = false;
+      this.isActiveWeekChart  = true;
+      this.salesChart.data.datasets[0].data = this.minutesPerDay;
+      this.salesChart.data.labels = this.labelForWeeks;
+      this.salesChart.update();
+      return
+    }
+    if(this.isActiveWeekChart){
+      this.isActiveMonthChart = true;
+      this.isActiveWeekChart  = false;
+      this.salesChart.data.datasets[0].data = this.minutesPerMonth;
+      this.salesChart.data.labels = this.labelForMonths;
+      this.salesChart.update();
+      return
+    }
   }
 
   async getAllPacks() {
@@ -51,57 +114,22 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  async setChartByMonths() {
+  getChartByMonths() {
     const arrayPacksSeparatedByMonths: Pack[][] = [];
-    let minutesPerMonth: number[] = [];
 
     for (let i = 0; i < 12; i++) {
       arrayPacksSeparatedByMonths[i] = this.packs.packs.filter(
         (pack) => new Date(pack?.dateEnd).getMonth() === i
       );
 
-      minutesPerMonth[i] = arrayPacksSeparatedByMonths[i].reduce(
+      this.minutesPerMonth[i] = arrayPacksSeparatedByMonths[i].reduce(
         (accumulator, element) => accumulator + element.minutesConsumed,
         0
       );
     }
-
-    const monthChart: DashboardChart = {
-      labels: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-      datasets: [
-        {
-          label: "Month",
-          data: [...minutesPerMonth],
-        },
-      ],
-    };
-
-    parseOptions(Chart, chartOptions());
-
-    var chartSales = document.getElementById("chart-sales");
-
-    this.salesChart = new Chart(chartSales, {
-      type: "line",
-      options: chartExample1.options,
-      data: monthChart,
-    });
-    this.salesChart.update();
   }
 
-  setChartByWeek() {
+  getChartByWeek() {
     const currentDate = new Date();
 
     const arrayPackLastWeek: Pack[] = this.packs.packs.filter(
@@ -114,7 +142,6 @@ export class DashboardComponent implements OnInit {
     );
 
     const arrayPacksSeparatedByDayWeek: Pack[][] = [];
-    let minutesPerDay: number[] = [];
     let auxIterator = 0;
     for (let i = 6; i >= 0; i--) {
       const subArray: Pack[] = arrayPackLastWeek.filter((pack) => {
@@ -123,11 +150,9 @@ export class DashboardComponent implements OnInit {
       
       arrayPacksSeparatedByDayWeek.push(subArray);
       
-      minutesPerDay[i] = arrayPacksSeparatedByDayWeek[auxIterator].reduce((accumulator, element) => accumulator + element.minutesConsumed, 0);
+      this.minutesPerDay[i] = arrayPacksSeparatedByDayWeek[auxIterator].reduce((accumulator, element) => accumulator + element.minutesConsumed, 0);
       auxIterator++;
     }
-
-    const pastDays: string[] = [];
 
     const dayWeeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     
@@ -135,31 +160,8 @@ export class DashboardComponent implements OnInit {
       const pastDay = new Date(currentDate);
       pastDay.setDate(currentDate.getDate()+1 - i);
       const nameDay = dayWeeks[pastDay.getDay()];
-      pastDays.push(nameDay);
+      this.labelForWeeks.push(nameDay);
     }
-
-    const weekChart: DashboardChart = {
-      labels: [...pastDays],
-      datasets: [
-        {
-          label: "Week",
-          data: [...minutesPerDay],
-        },
-      ],
-    };
-
-    this.salesChart.data = weekChart;
-
-    this.salesChart.update();
-
-  }
-
-
-  public updateOptions() {
-    console.log("update");
-
-    this.salesChart.data.datasets[0].data = this.data;
-    this.salesChart.update();
   }
 
   async buy(idPack: number) {

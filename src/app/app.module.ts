@@ -14,6 +14,7 @@ import { AppRoutingModule } from "./app.routing";
 import { ComponentsModule } from "./components/components.module";
 import { HomeModule } from "./pages/home/home.module";
 
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -23,7 +24,7 @@ import { HomeModule } from "./pages/home/home.module";
     HomeModule,
     NgbModule,
     RouterModule,
-    AppRoutingModule,
+    AppRoutingModule
   ],
   declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent],
   providers: [],

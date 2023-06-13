@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { User } from "src/app/models/user";
 import { AuthenticationService } from "src/app/services/auth.service";
 import { DashboardService } from "src/app/services/dashboard.service";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+
 
 @Component({
   selector: "app-user-profile",
@@ -55,6 +57,8 @@ export class UserProfileComponent implements OnInit {
   validateForm(){
     if (this.form.invalid) {
       console.log('Invalido');
+      this.form.markAllAsTouched();
+      Swal.fire('Formulario incompleto!', 'Todos los campos son obligatorios', 'warning')
       return
     }
     this.submit();
