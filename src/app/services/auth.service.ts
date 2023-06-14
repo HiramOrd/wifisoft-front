@@ -12,8 +12,8 @@ import { User } from "../models/user";
 export class AuthenticationService {
   constructor(private http: HttpClient, private router: Router) {}
 
-  async login(user: string, password: string): Promise<string> {
-    const body = new HttpParams().set("user", user).set("password", password);
+  async login(email: string, password: string): Promise<string> {
+    const body = new HttpParams().set("email", email).set("password", password);
     const observable = this.http.get<GenericRequest<string>>(
       API.SERVER + API.LOGIN,
       {
@@ -38,9 +38,14 @@ export class AuthenticationService {
       username: username,
       password: password,
     };
-
     const observable = this.http.post(API.SERVER + API.REGISTER, body);
     await firstValueFrom(observable);
+  }
+
+  async registerGuest(): Promise<GenericRequest<User>>  {
+    const observable = this.http.post<GenericRequest<User>>(API.SERVER + API.REGISTER_TEMP, null);
+    const user = await firstValueFrom(observable);
+    return user;
   }
 
   async getUser(email: string): Promise<GenericRequest<User>> {
@@ -55,14 +60,14 @@ export class AuthenticationService {
       }
     );
     const user = await firstValueFrom(observable);
-    localStorage.setItem("username", user.data.username);
+    localStorage.setItem("email", user.data.email);
 
     return user;
   }
 
   logout(): void {
     localStorage.removeItem("token");
-    localStorage.removeItem("username");
+    localStorage.removeItem("email");
 
     this.router.navigate(["/login"]);
   }

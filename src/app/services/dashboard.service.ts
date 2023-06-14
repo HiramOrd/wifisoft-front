@@ -12,10 +12,12 @@ import { User } from "../models/user";
 export class DashboardService {
   constructor(private http: HttpClient) {}
 
-  async getPack(id: string): Promise<GenericRequest<PacksHistory>> {
+  async getPack(email: string): Promise<GenericRequest<PacksHistory>> {
     const body = {
-      id: id,
+      email: email,
     };
+    console.log('body', body);
+    
     const observable = this.http.get<GenericRequest<PacksHistory>>(
       API.BASE + API.PACK,
       {
@@ -76,16 +78,16 @@ export class DashboardService {
   }
 
   async postPack(
-    idUser: string,
+    email: string,
     idPack: number
   ): Promise<GenericRequest<Voucher>> {
     const body = {
-      idUser: idUser,
+      email: email,
       idPack: idPack,
     };
 
     const observable = this.http.post<GenericRequest<Voucher>>(
-      API.BASE + API.PACK,
+      API.BASE + API.BUY_PACK,
       body
     );
     return await firstValueFrom(observable);

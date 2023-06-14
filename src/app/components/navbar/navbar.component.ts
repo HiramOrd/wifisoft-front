@@ -14,6 +14,7 @@ import { Router } from "@angular/router";
 })
 export class NavbarComponent implements OnInit {
   @Input() username: string;
+  
   public focus;
   public listTitles: any[];
   public location: Location;

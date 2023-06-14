@@ -11,7 +11,7 @@ import { DashboardService } from "src/app/services/dashboard.service";
 })
 export class LoginComponent implements OnInit, OnDestroy {
   form = this.formBuilder.group({
-    username: ["", Validators.required],
+    email: ["", Validators.required],
     password: ["", Validators.required],
   });
 
@@ -30,12 +30,27 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.form.invalid) return;
 
     try {
-      const { username, password } = this.form.value;
-      await this.authenticationService.login(username, password);
-      await this.authenticationService.getUser(username);
+      const { email, password } = this.form.value;
+      
+      await this.authenticationService.login(email, password);
+      await this.authenticationService.getUser(email);
       this.router.navigate(["/dashboard"]);
     } catch (error) {
       console.log(error);
     }
   }
+
+  async loginGuest() {
+    try {
+      const user = await this.authenticationService.registerGuest();
+      const {email, password} = user.data;
+      await this.authenticationService.login(email, password);
+      await this.authenticationService.getUser(email);
+      
+      this.router.navigate(["/dashboard"]);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 }

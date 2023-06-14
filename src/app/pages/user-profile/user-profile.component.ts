@@ -31,10 +31,10 @@ export class UserProfileComponent implements OnInit {
 
   async getUser(){
     try {
-      const user = localStorage.getItem("username");
+      const localEmail = localStorage.getItem("email");
 
       const { email, name, lastName, username } = (
-        await this.dashboardService.getUser(user)
+        await this.dashboardService.getUser(localEmail)
       ).data;
 
       if(name == 'Guest'){

@@ -9,7 +9,7 @@ import { LandingService } from "src/app/services/landing.service";
   styleUrls: ["./tables.component.scss"],
 })
 export class TablesComponent implements OnInit {
-  user: string;
+  email: string;
   packs: PacksHistory;
   packsToBuy: PackResume[];
 
@@ -20,9 +20,10 @@ export class TablesComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      this.user = localStorage.getItem("username");
-
-      this.packs = (await this.dashboardService.getPack(this.user)).data;
+      this.email = localStorage.getItem("email");
+      console.log('this.email', this.email);
+      
+      this.packs = (await this.dashboardService.getPack(this.email)).data;
       this.packsToBuy = (await this.landingService.getPackages()).data;
       
       this.packs.packs = this.packs.packs.map((item) => {
@@ -49,7 +50,7 @@ export class TablesComponent implements OnInit {
   }
 
   async buy(idPack: number) {
-    await this.dashboardService.postPack(this.user, idPack);
-    this.packs = (await this.dashboardService.getPack(this.user)).data;
+    await this.dashboardService.postPack(this.email, idPack);
+    this.packs = (await this.dashboardService.getPack(this.email)).data;
   }
 }

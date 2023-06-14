@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
   private minutesPerMonth: number[] = [];
   private minutesPerDay: number[] = [];
   packsToBuy: PackResume[];
-  user: string;
+  email: string;
   packs: PacksHistory;
 
   constructor(
@@ -55,9 +55,12 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this.email = localStorage.getItem("email");
     await this.getAllPacks();
     this.setChart();    
     this.packsToBuy = (await this.landingService.getPackages()).data;
+    console.log('this.packsToBuy', this.packsToBuy);
+    
   }
 
   async setChart(){
@@ -108,7 +111,7 @@ export class DashboardComponent implements OnInit {
 
   async getAllPacks() {
     try {
-      this.packs = (await this.dashboardService.getPack(this.user)).data;
+      this.packs = (await this.dashboardService.getPack(this.email)).data;
     } catch (error) {
       console.log(error);
     }
@@ -165,6 +168,19 @@ export class DashboardComponent implements OnInit {
   }
 
   async buy(idPack: number) {
-    await this.dashboardService.postPack(this.user, idPack);
+    console.log(this.email);
+    
+    this.dashboardService.postPack(this.email, idPack).then(
+      (voucher)=>{
+        console.log('voucher', voucher);
+        
+      }
+    ).catch(
+      ()=>{
+
+      }
+    );
+  
+    
   }
 }

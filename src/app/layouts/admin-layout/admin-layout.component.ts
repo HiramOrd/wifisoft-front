@@ -6,11 +6,11 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./admin-layout.component.scss"],
 })
 export class AdminLayoutComponent implements OnInit {
-  user: string;
+  email: string;
 
   constructor() {}
 
   ngOnInit() {
-    this.user = localStorage.getItem("username");
+    this.email = localStorage.getItem("email");
   }
 }
