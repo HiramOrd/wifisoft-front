@@ -92,15 +92,15 @@
                 </div>
                 <div class="col-lg-6">
                   <div class="form-group">
-                    <label class="form-control-label" for="input-last-name"
-                      >Lastname</label>
+                    <label class="form-control-label" for="input-password"
+                      >Contraseña</label>
                     <input
-                      type="text"
-                      id="input-last-name"
-                      [class.is-invalid]="form.get('lastName').invalid && form.get('lastName').touched"
+                      type="password"
+                      id="input-password"
+                      [class.is-invalid]="form.get('password').invalid && form.get('password').touched"
                       class="form-control form-control-alternative"
-                      placeholder="Last name"
-                      formControlName="lastName"
+                      placeholder="Password"
+                      formControlName="password"
                     />
                   </div>
                 </div>

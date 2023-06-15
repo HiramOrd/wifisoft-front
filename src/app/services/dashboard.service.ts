@@ -16,7 +16,6 @@ export class DashboardService {
     const body = {
       email: email,
     };
-    console.log('body', body);
     
     const observable = this.http.get<GenericRequest<PacksHistory>>(
       API.BASE + API.PACK,
@@ -62,12 +61,14 @@ export class DashboardService {
   async postUser(
     email: string,
     name: string,
-    username: string
+    username: string,
+    password: string | null
   ): Promise<GenericRequest<User>> {
     const body = {
       name: name,
       username: username,
       email: email,
+      password
     };
 
     const observable = this.http.put<GenericRequest<User>>(

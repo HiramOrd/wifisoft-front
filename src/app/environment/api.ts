@@ -1,6 +1,6 @@
 export class API {
   static SERVER =
-    "https://c08f-2806-2f0-8080-16f2-4e67-d514-9b0e-967b.ngrok-free.app/wifisoft";
+    "https://01923057-59e4-4822-95f6-a446588754ff.mock.pstmn.io/wifisoft";
   static API = "/api/v1";
   static BASE = this.SERVER + this.API;
 

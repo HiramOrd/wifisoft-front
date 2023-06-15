@@ -17,7 +17,7 @@ export class UserProfileComponent implements OnInit {
     email: ["", Validators.required],
     username: ["", Validators.required],
     name: ["", Validators.required],
-    lastName: ["", Validators.required],
+    password: [null, Validators.minLength(6)],
   });
 
   constructor(
@@ -33,7 +33,7 @@ export class UserProfileComponent implements OnInit {
     try {
       const localEmail = localStorage.getItem("email");
 
-      const { email, name, lastName, username } = (
+      const { email, name, username } = (
         await this.dashboardService.getUser(localEmail)
       ).data;
 
@@ -46,7 +46,6 @@ export class UserProfileComponent implements OnInit {
       this.form.patchValue({
         email,
         name,
-        lastName,
         username
       });
     } catch (error) {
@@ -55,10 +54,11 @@ export class UserProfileComponent implements OnInit {
   }
 
   validateForm(){
+    console.log('this.form.value.password', this.form.value.password);
     if (this.form.invalid) {
       console.log('Invalido');
       this.form.markAllAsTouched();
-      Swal.fire('Formulario incompleto!', 'Todos los campos son obligatorios', 'warning')
+      Swal.fire('Formulario incompleto!', 'Todos los campos son obligatorios', 'warning');
       return
     }
     this.submit();
@@ -66,9 +66,9 @@ export class UserProfileComponent implements OnInit {
 
   async submit() {
     try {
-      const { email, name, username } = this.form.value;
-
-      await this.dashboardService.postUser(email, name, username);
+      const { email, name, username, password } = this.form.value;
+      
+      await this.dashboardService.postUser(email, name, username, password);
     } catch (error) {}
   }
 }

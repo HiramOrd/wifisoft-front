@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import Chart from "chart.js";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 // core components
 import {
@@ -59,8 +60,6 @@ export class DashboardComponent implements OnInit {
     await this.getAllPacks();
     this.setChart();    
     this.packsToBuy = (await this.landingService.getPackages()).data;
-    console.log('this.packsToBuy', this.packsToBuy);
-    
   }
 
   async setChart(){
@@ -118,8 +117,9 @@ export class DashboardComponent implements OnInit {
   }
 
   getChartByMonths() {
+    if(this.packs?.packs! == undefined) return;
     const arrayPacksSeparatedByMonths: Pack[][] = [];
-
+    
     for (let i = 0; i < 12; i++) {
       arrayPacksSeparatedByMonths[i] = this.packs.packs.filter(
         (pack) => new Date(pack?.dateEnd).getMonth() === i
@@ -133,6 +133,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getChartByWeek() {
+    if(this.packs?.packs! == undefined) return;
     const currentDate = new Date();
 
     const arrayPackLastWeek: Pack[] = this.packs.packs.filter(
@@ -168,16 +169,15 @@ export class DashboardComponent implements OnInit {
   }
 
   async buy(idPack: number) {
-    console.log(this.email);
-    
     this.dashboardService.postPack(this.email, idPack).then(
       (voucher)=>{
         console.log('voucher', voucher);
+        Swal.fire('Paquete adquirido!', '', 'success');
         
       }
     ).catch(
       ()=>{
-
+        Swal.fire('Error!', 'Hubo un error al adquirir el paquete', 'error');
       }
     );
   
