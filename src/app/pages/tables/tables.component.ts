@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Pack, PackResume, PacksHistory, Voucher } from "src/app/models/packs";
 import { DashboardService } from "src/app/services/dashboard.service";
 import { LandingService } from "src/app/services/landing.service";
-
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 @Component({
   selector: "app-tables",
   templateUrl: "./tables.component.html",
@@ -55,9 +55,8 @@ export class TablesComponent implements OnInit {
 
   reactivatePack(vouchers:Voucher[]){
     const currentDate = new Date();
-    //localStorage.setItem("currentEmailVouchers", JSON.stringify(vouchers));
     let localVouchers: Voucher[] = JSON.parse(localStorage.getItem('currentEmailVouchers')) ?? [];
-    //vouchers = localVouchers;
+    vouchers = localVouchers;
     console.log('localVouchers', localVouchers);
     
 
@@ -80,9 +79,10 @@ export class TablesComponent implements OnInit {
       vouchers.push(newVoucher);
       localStorage.setItem("currentEmailVouchers", JSON.stringify(vouchers));
       console.log('Disponible');
+      Swal.fire('Voucher activado!', '', 'success');
     }else{
       console.log('No disponible');
-      
+      Swal.fire('No disponible', 'Ya cuentas con un voucher activo', 'warning');
     }
     console.log('currentEmailVouchers', localVouchers);
     
@@ -113,7 +113,7 @@ export class TablesComponent implements OnInit {
     const differenceInHours = differenceInMilliseconds / 3600000;
     console.log('differenceInHours', differenceInHours);
     
-    return differenceInHours <= 1;
+    return differenceInHours >= 1;
   }
 
 }
