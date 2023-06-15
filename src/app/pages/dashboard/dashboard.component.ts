@@ -63,6 +63,7 @@ export class DashboardComponent implements OnInit {
   }
 
   async setChart(){
+    if(this.packs?.packs! == undefined) return;
     this.getChartByMonths();
     this.getChartByWeek();
 
@@ -81,7 +82,7 @@ export class DashboardComponent implements OnInit {
     parseOptions(Chart, chartOptions());
 
     var chartSales = document.getElementById("chart-sales");
-
+    
     this.salesChart = new Chart(chartSales, {
       type: "line",
       options: chartExample1.options,
@@ -110,14 +111,17 @@ export class DashboardComponent implements OnInit {
 
   async getAllPacks() {
     try {
+      console.log('this.email', this.email);
+      
       this.packs = (await this.dashboardService.getPack(this.email)).data;
+      console.log(this.packs);
+      
     } catch (error) {
       console.log(error);
     }
   }
 
   getChartByMonths() {
-    if(this.packs?.packs! == undefined) return;
     const arrayPacksSeparatedByMonths: Pack[][] = [];
     
     for (let i = 0; i < 12; i++) {
@@ -133,7 +137,6 @@ export class DashboardComponent implements OnInit {
   }
 
   getChartByWeek() {
-    if(this.packs?.packs! == undefined) return;
     const currentDate = new Date();
 
     const arrayPackLastWeek: Pack[] = this.packs.packs.filter(

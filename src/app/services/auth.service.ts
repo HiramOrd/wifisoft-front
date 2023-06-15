@@ -5,12 +5,17 @@ import { API } from "../environment/api";
 import { firstValueFrom } from "rxjs";
 import { GenericRequest } from "../models/generic";
 import { User } from "../models/user";
+import { DashboardService } from "./dashboard.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthenticationService {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private dashboardService: DashboardService
+    ) {}
 
   async login(email: string, password: string): Promise<string> {
     const body = new HttpParams().set("email", email).set("password", password);
@@ -20,8 +25,9 @@ export class AuthenticationService {
         params: body,
       }
     );
-
+      
     const response = await firstValueFrom(observable);
+   
     localStorage.setItem("token", response.data);
     return response.data;
   }
@@ -61,13 +67,14 @@ export class AuthenticationService {
     );
     const user = await firstValueFrom(observable);
     localStorage.setItem("email", user.data.email);
-
+    this.dashboardService.getPack(user.data.email);
     return user;
   }
 
   logout(): void {
     localStorage.removeItem("token");
     localStorage.removeItem("email");
+    localStorage.removeItem("currentEmailVouchers");
 
     this.router.navigate(["/login"]);
   }

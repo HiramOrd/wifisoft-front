@@ -32,7 +32,8 @@
   <!-- Table -->
   <div class="row">
     <div class="col">
-      <div class="card shadow">
+      <app-content-not-available *ngIf="packs?.packs! == undefined || packs?.packs! == []" [title]="'Contenido no disponible'" [text]="'Compra algún paquete para ver la grafica de tu consumo'"></app-content-not-available>
+      <div class="card shadow"*ngIf="packs?.packs! != undefined || packs?.packs! != []" >
         <div class="card-header border-0">
           <h3 class="mb-0">History</h3>
         </div>
@@ -45,10 +46,11 @@
                 <th scope="col">End</th>
                 <th scope="col">Status</th>
                 <th scope="col">Usage</th>
+                <th scope="col">Active</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let pack of packs.packs">
+              <tr *ngFor="let pack of packs?.packs">
                 <th scope="row">
                   <div class="media align-items-center">
                     <div class="media-body">
@@ -77,6 +79,12 @@
                       </div>
                     </div>
                   </div>
+                </td>
+
+                <td>
+                  <button type="submit" (click)="reactivatePack(pack.vouchers)" [disabled]="pack?.dateEnd != null" class="btn btn-sm btn-primary">
+                    Active
+                  </button>
                 </td>
               </tr>
             </tbody>

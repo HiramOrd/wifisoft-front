@@ -11,6 +11,7 @@ import { DashboardComponent } from "../../pages/dashboard/dashboard.component";
 import { UserProfileComponent } from "../../pages/user-profile/user-profile.component";
 import { TablesComponent } from "../../pages/tables/tables.component";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { ContentNotAvailableComponent } from "src/app/components/content-not-available/content-not-available.component";
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
     HttpClientModule,
     NgbModule,
     ClipboardModule,
+
   ],
-  declarations: [DashboardComponent, UserProfileComponent, TablesComponent],
+  declarations: [DashboardComponent, UserProfileComponent, ContentNotAvailableComponent, TablesComponent],
 })
 export class AdminLayoutModule {}

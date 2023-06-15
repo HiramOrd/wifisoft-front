@@ -23,6 +23,7 @@ export class DashboardService {
         params: body,
       }
     );
+    
     return await firstValueFrom(observable);
   }
 
