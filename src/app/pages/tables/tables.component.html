@@ -82,7 +82,7 @@
                 </td>
 
                 <td>
-                  <button type="submit" (click)="reactivatePack(pack.vouchers)" [disabled]="pack?.dateEnd != null" class="btn btn-sm btn-primary">
+                  <button type="submit" (click)="reactivatePack(pack.vouchers)" [disabled]="pack?.dateEnd != null && voucherHasHourDifference == false" class="btn btn-sm btn-primary">
                     Active
                   </button>
                 </td>

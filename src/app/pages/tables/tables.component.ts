@@ -12,7 +12,7 @@ export class TablesComponent implements OnInit {
   email: string;
   packs: PacksHistory;
   packsToBuy: PackResume[];
-
+  public voucherHasHourDifference: boolean = false;
   constructor(
     private dashboardService: DashboardService,
     private landingService: LandingService
@@ -56,7 +56,15 @@ export class TablesComponent implements OnInit {
   reactivatePack(vouchers:Voucher[]){
     const currentDate = new Date();
     let localVouchers: Voucher[] = JSON.parse(localStorage.getItem('currentEmailVouchers')) ?? [];
-    vouchers = localVouchers;
+
+    console.log('ocalVouchers', localVouchers);
+    
+    if(localVouchers.length == 0){
+      console.log('vouchers', vouchers);
+      
+      localVouchers = vouchers
+    }
+
     console.log('localVouchers', localVouchers);
     
 
@@ -66,10 +74,10 @@ export class TablesComponent implements OnInit {
 
     console.log('currentDate', currentDate);
     
-    let hasHourDifference = this.hasHourDifference(currentDate, new Date(lastVoucher.dateStart));
-    console.log('hasHourDifference', hasHourDifference);
+    this.voucherHasHourDifference = this.hasHourDifference(currentDate, new Date(lastVoucher.dateStart));
+    console.log('hasHourDifference', this.voucherHasHourDifference);
     
-    if(hasHourDifference){
+    if(this.voucherHasHourDifference){
       let newVoucher: Voucher = {
         code: '2323s',
         minutes: 60,
