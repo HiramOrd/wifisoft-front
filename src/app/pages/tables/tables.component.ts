@@ -12,6 +12,7 @@ export class TablesComponent implements OnInit {
   email: string;
   packs: PacksHistory;
   packsToBuy: PackResume[];
+  private localVouchers: Voucher[];
   public voucherHasHourDifference: boolean = false;
   constructor(
     private dashboardService: DashboardService,
@@ -19,15 +20,31 @@ export class TablesComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+  //localStorage.removeItem("currentEmailVouchers");
     try {
       this.email = localStorage.getItem("email");
-      
+
       this.packs = (await this.dashboardService.getPack(this.email)).data;
+
+      this.verifyIfHasActiveVoucher();
+      console.log('this.localVouchers', this.localVouchers);
+      
+      let minutesConsumed = this.localVouchers.reduce((accumulator, voucher) => {
+        return accumulator + voucher.minutes;
+      }, 0);
+
+      console.log('minutesConsumed', minutesConsumed);
+      
+
+      console.log(this.packs);
+      
       this.packsToBuy = (await this.landingService.getPackages()).data;
       
       this.packs.packs = this.packs.packs.map((item) => {
         item.percent = (item?.minutesConsumed * 100) / item?.minutes;
-        
+        if(item.dateEnd==null){
+          item.percent = (minutesConsumed * 100) / item?.minutes;
+        }
         switch (item.minutes) {
           case 60:
             item.type = '1 Hora';
@@ -43,6 +60,7 @@ export class TablesComponent implements OnInit {
         return item;
       });
       console.log('this.packs', this.packs);
+      
     } catch (error) {
       console.log(error);
     }
@@ -53,30 +71,33 @@ export class TablesComponent implements OnInit {
     this.packs = (await this.dashboardService.getPack(this.email)).data;
   }
 
-  reactivatePack(vouchers:Voucher[]){
+  verifyIfHasActiveVoucher(){
     const currentDate = new Date();
-    let localVouchers: Voucher[] = JSON.parse(localStorage.getItem('currentEmailVouchers')) ?? [];
+    this.localVouchers = JSON.parse(localStorage.getItem('currentEmailVouchers')) ?? [];
 
-    console.log('ocalVouchers', localVouchers);
-    
-    if(localVouchers.length == 0){
-      console.log('vouchers', vouchers);
+    if(this.localVouchers.length == 0){
+      console.log('vouchers', this.packs.packs); 
+      let filteredPack: Pack[] = this.packs.packs.filter(pack=>{
+        return pack.dateEnd == null;
+      })
+      console.log('filtered', filteredPack[0].vouchers);
+      this.localVouchers = filteredPack[0].vouchers;
+      console.log('this.localVouchers', this.localVouchers);
       
-      localVouchers = vouchers
+      //this.localVouchers = this.packs.packs
     }
 
-    console.log('localVouchers', localVouchers);
-    
-
-    const formattedDate = this.formatDateTime(new Date());
-    console.log('localVouchers[localVouchers.length-1]', localVouchers[localVouchers.length-1]);
-    let lastVoucher = localVouchers[localVouchers.length-1]
+    console.log('localVouchers[localVouchers.length-1]', this.localVouchers[this.localVouchers.length-1]);
+    let lastVoucher = this.localVouchers[this.localVouchers.length-1]
 
     console.log('currentDate', currentDate);
     
     this.voucherHasHourDifference = this.hasHourDifference(currentDate, new Date(lastVoucher.dateStart));
     console.log('hasHourDifference', this.voucherHasHourDifference);
-    
+  }
+
+  reactivatePack(){
+    const formattedDate = this.formatDateTime(new Date());
     if(this.voucherHasHourDifference){
       let newVoucher: Voucher = {
         code: '2323s',
@@ -84,15 +105,15 @@ export class TablesComponent implements OnInit {
         dateStart: formattedDate
       }
       console.log('newVoucher', newVoucher);
-      vouchers.push(newVoucher);
-      localStorage.setItem("currentEmailVouchers", JSON.stringify(vouchers));
+      this.localVouchers.push(newVoucher);
+      localStorage.setItem("currentEmailVouchers", JSON.stringify(this.localVouchers));
       console.log('Disponible');
       Swal.fire('Voucher activado!', '', 'success');
+      this.verifyIfHasActiveVoucher();
     }else{
       console.log('No disponible');
       Swal.fire('No disponible', 'Ya cuentas con un voucher activo', 'warning');
     }
-    console.log('currentEmailVouchers', localVouchers);
     
   }
 

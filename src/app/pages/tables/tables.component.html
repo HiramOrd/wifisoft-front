@@ -54,7 +54,7 @@
                 <th scope="row">
                   <div class="media align-items-center">
                     <div class="media-body">
-                      <span class="mb-0 text-sm">{{ pack?.type }}-</span>
+                      <span class="mb-0 text-sm">{{ pack?.type }}</span>
                     </div>
                   </div>
                 </th>
@@ -82,7 +82,7 @@
                 </td>
 
                 <td>
-                  <button type="submit" (click)="reactivatePack(pack.vouchers)" [disabled]="pack?.dateEnd != null && voucherHasHourDifference == false" class="btn btn-sm btn-primary">
+                  <button type="submit" (click)="reactivatePack()" [disabled]="pack?.dateEnd != null || voucherHasHourDifference == false" class="btn btn-sm btn-primary">
                     Active
                   </button>
                 </td>
