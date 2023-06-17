@@ -49,6 +49,7 @@ export class DashboardComponent implements OnInit {
   packsToBuy: PackResume[];
   email: string;
   packs: PacksHistory;
+  public isLoading: boolean = true;
 
   constructor(
     private dashboardService: DashboardService,
@@ -60,6 +61,7 @@ export class DashboardComponent implements OnInit {
     await this.getAllPacks();
     this.setChart();    
     this.packsToBuy = (await this.landingService.getPackages()).data;
+    this.isLoading = false;
   }
 
   async setChart(){

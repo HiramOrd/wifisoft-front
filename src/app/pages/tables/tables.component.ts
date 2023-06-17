@@ -13,6 +13,7 @@ export class TablesComponent implements OnInit {
   packs: PacksHistory;
   packsToBuy: PackResume[];
   private localVouchers: Voucher[];
+  public isLoading: boolean = true;
   public voucherHasHourDifference: boolean = false;
   constructor(
     private dashboardService: DashboardService,
@@ -45,6 +46,9 @@ export class TablesComponent implements OnInit {
         if(item.dateEnd==null){
           item.percent = (minutesConsumed * 100) / item?.minutes;
         }
+        if(minutesConsumed > item.minutes ){
+          item.dateEnd = this.formatDateTime(new Date());
+        }
         switch (item.minutes) {
           case 60:
             item.type = '1 Hora';
@@ -60,7 +64,7 @@ export class TablesComponent implements OnInit {
         return item;
       });
       console.log('this.packs', this.packs);
-      
+      this.isLoading = false;
     } catch (error) {
       console.log(error);
     }

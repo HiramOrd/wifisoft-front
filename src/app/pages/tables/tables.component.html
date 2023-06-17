@@ -31,7 +31,7 @@
 <div class="container-fluid mt--7">
   <!-- Table -->
   <div class="row">
-    <div class="col">
+    <div class="col" *ngIf="!isLoading">
       <app-content-not-available *ngIf="packs?.packs! == undefined || packs?.packs! == []" [title]="'Contenido no disponible'" [text]="'Compra algún paquete para ver la grafica de tu consumo'"></app-content-not-available>
       <div class="card shadow"*ngIf="packs?.packs! != undefined || packs?.packs! != []" >
         <div class="card-header border-0">

@@ -27,8 +27,8 @@
   </div>
 </div>
 <div class="container-fluid mt--7">
-  <div class="row">
-    <div class="col-xl-12 mb-5 mb-xl-0" *ngIf="packs?.packs! == undefined || packs?.packs! == []">
+  <div class="row" >
+    <div class="col-xl-12 mb-5 mb-xl-0" *ngIf="(packs?.packs! == undefined || packs?.packs! == []) && !isLoading">
       <app-content-not-available [title]="'Contenido no disponible'" [text]="'Compra algún paquete para ver la grafica de tu consumo'"></app-content-not-available>
     </div>
     <div class="col-xl-12 mb-5 mb-xl-0" *ngIf="packs?.packs! != undefined || packs?.packs! != []">
