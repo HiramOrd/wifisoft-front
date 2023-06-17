@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthenticationService } from "src/app/services/auth.service";
-
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
@@ -35,7 +35,9 @@ export class RegisterComponent implements OnInit {
         username,
         password
       );
+      Swal.fire('Registro correcto', '', 'success');
       this.router.navigate(["/login"]);
+
     } catch (error) {
       console.log(error);
     }

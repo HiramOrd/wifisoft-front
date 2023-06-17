@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthenticationService } from "src/app/services/auth.service";
 import { DashboardService } from "src/app/services/dashboard.service";
-
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       await this.authenticationService.getUser(email);
       this.router.navigate(["/dashboard"]);
     } catch (error) {
+      Swal.fire('Usuario no encontrado', '', 'error');
       console.log(error);
     }
   }

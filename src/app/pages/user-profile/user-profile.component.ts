@@ -19,7 +19,7 @@ export class UserProfileComponent implements OnInit {
     name: ["", Validators.required],
     password: [null, Validators.minLength(6)],
   });
-
+  
   constructor(
     private dashboardService: DashboardService,
     private formBuilder: FormBuilder
@@ -66,9 +66,14 @@ export class UserProfileComponent implements OnInit {
 
   async submit() {
     try {
-      const { email, name, username, password } = this.form.value;
+      const email = localStorage.getItem("email");
+      const { name, username, password } = this.form.value;
+      console.log(this.form.value);
+      console.log(email);
       
       await this.dashboardService.postUser(email, name, username, password);
+
+      Swal.fire('Información actualizada', '', 'success');
     } catch (error) {}
   }
 }
