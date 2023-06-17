@@ -28,10 +28,10 @@
 </div>
 <div class="container-fluid mt--7">
   <div class="row" >
-    <div class="col-xl-12 mb-5 mb-xl-0" *ngIf="(packs?.packs! == undefined || packs?.packs! == []) && !isLoading">
+    <div class="col-xl-12 mb-5 mb-xl-0" *ngIf="(packs?.packs! == undefined || packs?.packs?.length! == 0) && !isLoading">
       <app-content-not-available [title]="'Contenido no disponible'" [text]="'Compra algún paquete para ver la grafica de tu consumo'"></app-content-not-available>
     </div>
-    <div class="col-xl-12 mb-5 mb-xl-0" *ngIf="packs?.packs! != undefined || packs?.packs! != []">
+    <div class="col-xl-12 mb-5 mb-xl-0" *ngIf="packs?.packs?.length! != 0">
       <div class="card bg-gradient-default shadow">
         <div class="card-header bg-transparent">
           <div class="row align-items-center">
@@ -57,7 +57,8 @@
                     <span class="d-md-none">M</span>
                   </a>
                 </li>
-                <li
+
+<!--                 <li
                   class="nav-item"
                   data-toggle="chart"
                   data-target="#chart-sales"
@@ -72,7 +73,8 @@
                     <span class="d-none d-md-block">Week</span>
                     <span class="d-md-none">W</span>
                   </a>
-                </li>
+                </li> -->
+
               </ul>
             </div>
           </div>

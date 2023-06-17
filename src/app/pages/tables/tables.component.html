@@ -32,8 +32,8 @@
   <!-- Table -->
   <div class="row">
     <div class="col" *ngIf="!isLoading">
-      <app-content-not-available *ngIf="packs?.packs! == undefined || packs?.packs! == []" [title]="'Contenido no disponible'" [text]="'Compra algún paquete para ver la grafica de tu consumo'"></app-content-not-available>
-      <div class="card shadow"*ngIf="packs?.packs! != undefined || packs?.packs! != []" >
+      <app-content-not-available *ngIf="packs?.packs! == undefined || packs?.packs?.length! == 0" [title]="'Contenido no disponible'" [text]="'Compra algún paquete para ver la grafica de tu consumo'"></app-content-not-available>
+      <div class="card shadow"*ngIf="packs?.packs?.length! != 0" >
         <div class="card-header border-0">
           <h3 class="mb-0">History</h3>
         </div>
@@ -65,7 +65,7 @@
 
                 <td>
                   <div class="d-flex align-items-center">
-                    <span class="mr-2">{{ pack?.percent }}%</span>
+                    <span class="mr-2">{{ pack?.percent.toFixed(2) }}%</span>
                     <div>
                       <div class="progress">
                         <div

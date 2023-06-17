@@ -28,11 +28,11 @@ export class DashboardService {
   }
 
   async getVoucher(
-    idUser: number,
+    email: string,
     minutes: number
   ): Promise<GenericRequest<Voucher>> {
     const body = {
-      idUser: idUser,
+      email: email,
       minutes: minutes,
     };
 

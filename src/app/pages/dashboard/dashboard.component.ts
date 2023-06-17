@@ -61,13 +61,15 @@ export class DashboardComponent implements OnInit {
     await this.getAllPacks();
     this.setChart();    
     this.packsToBuy = (await this.landingService.getPackages()).data;
+    console.log(this.packsToBuy);
+    
     this.isLoading = false;
   }
 
   async setChart(){
     if(this.packs?.packs! == undefined) return;
     this.getChartByMonths();
-    this.getChartByWeek();
+    //this.getChartByWeek();
 
     const generalChart: DashboardChart = {
       labels: [
@@ -116,7 +118,7 @@ export class DashboardComponent implements OnInit {
       console.log('this.email', this.email);
       
       this.packs = (await this.dashboardService.getPack(this.email)).data;
-      console.log(this.packs);
+      //console.log(this.packs);
       
     } catch (error) {
       console.log(error);
@@ -136,33 +138,44 @@ export class DashboardComponent implements OnInit {
         0
       );
     }
+
+    console.log('this.minutesPerMonth', this.minutesPerMonth);
+    
   }
 
   getChartByWeek() {
     const currentDate = new Date();
-
+    console.log('hola');
+    
     const arrayPackLastWeek: Pack[] = this.packs.packs.filter(
       (pack) => {
-        const timeElapsed =
-          currentDate.getTime() - new Date(pack.dateEnd).getTime();
+        const timeElapsed = currentDate.getTime() - new Date(pack.dateEnd).getTime();
         const timeInDays = Math.floor(timeElapsed / (1000 * 60 * 60 * 24));
+        console.log('timeElapsed', timeElapsed);
+        
         return timeInDays <= 7 && timeInDays >= 0;
       }
     );
-
+      console.log(arrayPackLastWeek);
+      
     const arrayPacksSeparatedByDayWeek: Pack[][] = [];
     let auxIterator = 0;
+    
     for (let i = 6; i >= 0; i--) {
       const subArray: Pack[] = arrayPackLastWeek.filter((pack) => {
+        console.log('log', pack);
+        
         return new Date(pack.dateEnd).getDay() === i;
     });
       
       arrayPacksSeparatedByDayWeek.push(subArray);
+      //console.log('arrayPacksSeparatedByDayWeek', arrayPacksSeparatedByDayWeek);
       
       this.minutesPerDay[i] = arrayPacksSeparatedByDayWeek[auxIterator].reduce((accumulator, element) => accumulator + element.minutesConsumed, 0);
       auxIterator++;
     }
-
+    console.log('this.minutesPerDay', this.minutesPerDay);
+    
     const dayWeeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     
     for (let i = 7; i >= 1; i--) {
@@ -174,6 +187,8 @@ export class DashboardComponent implements OnInit {
   }
 
   async buy(idPack: number) {
+    console.log('hola');
+    
     this.dashboardService.postPack(this.email, idPack).then(
       (voucher)=>{
         console.log('voucher', voucher);

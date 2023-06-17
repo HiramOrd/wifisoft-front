@@ -21,48 +21,38 @@ export class TablesComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-  //localStorage.removeItem("currentEmailVouchers");
     try {
       this.email = localStorage.getItem("email");
 
       this.packs = (await this.dashboardService.getPack(this.email)).data;
-
+      console.log('this.packs', this.packs);
+      
       this.verifyIfHasActiveVoucher();
-      console.log('this.localVouchers', this.localVouchers);
-      
-      let minutesConsumed = this.localVouchers.reduce((accumulator, voucher) => {
-        return accumulator + voucher.minutes;
-      }, 0);
-
-      console.log('minutesConsumed', minutesConsumed);
-      
-
-      console.log(this.packs);
-      
+     
       this.packsToBuy = (await this.landingService.getPackages()).data;
       
       this.packs.packs = this.packs.packs.map((item) => {
         item.percent = (item?.minutesConsumed * 100) / item?.minutes;
-        if(item.dateEnd==null){
-          item.percent = (minutesConsumed * 100) / item?.minutes;
-        }
-        if(minutesConsumed > item.minutes ){
-          item.dateEnd = this.formatDateTime(new Date());
-        }
-        switch (item.minutes) {
+        console.log(item);
+        item.type = item.minutes / 60 + ' Horas';
+/*         switch (item.minutes) {
           case 60:
             item.type = '1 Hora';
             break;
           case 120:
             item.type = '2 Horas';
             break;
+          case 120:
+              item.type = '2 Horas';
+              break;
           default:
             item.type = '2 Horas';
             break;
-        }
+        } */
 
         return item;
       });
+     
       console.log('this.packs', this.packs);
       this.isLoading = false;
     } catch (error) {
@@ -71,49 +61,58 @@ export class TablesComponent implements OnInit {
   }
 
   async buy(idPack: number) {
-    await this.dashboardService.postPack(this.email, idPack);
-    this.packs = (await this.dashboardService.getPack(this.email)).data;
+    this.dashboardService.postPack(this.email, idPack).then(
+      (voucher)=>{
+        console.log('voucher', voucher);
+        Swal.fire('Paquete adquirido!', '', 'success');
+        this.ngOnInit();
+      }
+    ).catch(
+      ()=>{
+        Swal.fire('Error!', 'Hubo un error al adquirir el paquete', 'error');
+      }
+    );
+  
+    
   }
 
   verifyIfHasActiveVoucher(){
     const currentDate = new Date();
-    this.localVouchers = JSON.parse(localStorage.getItem('currentEmailVouchers')) ?? [];
 
-    if(this.localVouchers.length == 0){
-      console.log('vouchers', this.packs.packs); 
-      let filteredPack: Pack[] = this.packs.packs.filter(pack=>{
-        return pack.dateEnd == null;
-      })
-      console.log('filtered', filteredPack[0].vouchers);
-      this.localVouchers = filteredPack[0].vouchers;
-      console.log('this.localVouchers', this.localVouchers);
-      
-      //this.localVouchers = this.packs.packs
-    }
+    console.log('vouchers', this.packs.packs); 
+    let filteredPack: Pack[] = this.packs.packs.filter(pack=>{
 
-    console.log('localVouchers[localVouchers.length-1]', this.localVouchers[this.localVouchers.length-1]);
-    let lastVoucher = this.localVouchers[this.localVouchers.length-1]
+      return pack.dateEnd == null;
+    })
+    console.log('filteredPack', filteredPack);
+    
+    if(filteredPack == undefined || filteredPack.length == 0) return;
+    console.log('filtered', filteredPack[0].vouchers);
+    this.localVouchers = filteredPack[0].vouchers;
+    console.log('this.localVouchers', this.localVouchers);
 
+    console.log('this.localVoucher', this.localVouchers);
+    
+
+    console.log('localVouchers[localVouchers.length-1]', this.localVouchers[0]);
+    let lastVoucher = this.localVouchers[0]
+    console.log('lastVoucher', lastVoucher);
+    
     console.log('currentDate', currentDate);
     
     this.voucherHasHourDifference = this.hasHourDifference(currentDate, new Date(lastVoucher.dateStart));
     console.log('hasHourDifference', this.voucherHasHourDifference);
   }
 
-  reactivatePack(){
+  async reactivatePack(){
     const formattedDate = this.formatDateTime(new Date());
     if(this.voucherHasHourDifference){
-      let newVoucher: Voucher = {
-        code: '2323s',
-        minutes: 60,
-        dateStart: formattedDate
-      }
-      console.log('newVoucher', newVoucher);
-      this.localVouchers.push(newVoucher);
-      localStorage.setItem("currentEmailVouchers", JSON.stringify(this.localVouchers));
+      //this.localVouchers.push(newVoucher);
       console.log('Disponible');
+      await this.dashboardService.getVoucher(this.email, 60);
       Swal.fire('Voucher activado!', '', 'success');
-      this.verifyIfHasActiveVoucher();
+      this.ngOnInit();
+      //this.verifyIfHasActiveVoucher();
     }else{
       console.log('No disponible');
       Swal.fire('No disponible', 'Ya cuentas con un voucher activo', 'warning');
